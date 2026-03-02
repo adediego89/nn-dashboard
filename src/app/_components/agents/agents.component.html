@@ -1,0 +1,158 @@
+<p-table [value]="(agentsSvc.$agents | async)!" [paginator]="true" [rows]="50" dataKey="id" [scrollable]="true" scrollHeight="flex">
+
+  <ng-template #caption>
+    <div class="flex justify-content-center">
+      <h4 class="m-0">Agents</h4>
+    </div>
+  </ng-template>
+
+  <ng-template #header>
+    <tr>
+      <th id="name" pSortableColumn="name">
+        <div class="flex align-items-center gap-2">
+          Name
+          <p-sortIcon field="name" />
+        </div>
+      </th>
+      <th id="presence" pSortableColumn="presence.presenceDefinition.systemPresence">
+        <div class="flex align-items-center gap-2">
+          Presence
+          <p-sortIcon field="presence.presenceDefinition.systemPresence" />
+        </div>
+      </th>
+      <th id="presenceTime" pSortableColumn="presence.modifiedDate">
+        <div class="flex align-items-center gap-2">
+          Time (Presence)
+          <p-sortIcon field="presence.modifiedDate" />
+        </div>
+      </th>
+      <th id="routing" pSortableColumn="routingStatus.status">
+        <div class="flex align-items-center gap-2">
+          Routing
+          <p-sortIcon field="routingStatus.status" />
+        </div>
+      </th>
+      <th id="routingTime" pSortableColumn="routingStatus.startTime">
+        <div class="flex align-items-center gap-2">
+          Time (Routing)
+          <p-sortIcon field="routingStatus.startTime" />
+        </div>
+      </th>
+      <th id="groups">
+        <div class="flex align-items-center justify-content-between">
+          Groups
+          <p-columnFilter field="groups" matchMode="inArray" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+            <ng-template #filter let-value let-filter="filterCallback">
+              <p-multiselect [ngModel]="value"
+                             [options]="agentsSvc.getGroupOpts()"
+                             (onChange)="filter($event.value)"
+                             optionLabel="name"
+                             optionValue="name"
+                             style="min-width: 14rem"
+                             [panelStyle]="{ minWidth: '16rem' }">
+              </p-multiselect>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+      <th id="summary">Interactions Summary</th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-user let-expanded="expanded">
+    <tr style="line-height: 2.1rem">
+      <td>{{ user.name }}</td>
+      <td>
+        <div class="flex align-items-center">
+          <i class="pi pi-circle-on ml-2 mr-2" style="font-size: 12px" [style.color]="getTagColor(user.presence.presenceDefinition.systemPresence)"></i>
+          {{user.presence.presenceDefinition.id | statusName}}
+        </div>
+      </td>
+      <td>{{user.presence.modifiedDate | customTime:(clockSvc.now$ | async)}}</td>
+      <td>{{ user.routingStatus.status}}</td>
+      <td>{{user.routingStatus.startTime | customTime:(clockSvc.now$ | async)}}</td>
+      <td>{{getGroupNames(user.groups)}}</td>
+      <td>
+        <p-button type="button"
+                  [pRowToggler]="user"
+                  severity="secondary"
+                  [text]="true"
+                  [size]="'small'"
+        [disabled]="user.interactions.length === 0">
+          <div class="flex">
+            <div class="flex align-items-center mr-2">
+              <i class="pi pi-phone ml-2 mr-2"></i>
+              {{getMediaNumber(user.summary.call)}}
+            </div>
+            <div class="flex align-items-center mr-2">
+              <i class="pi pi-envelope ml-2 mr-2"></i>
+              {{getMediaNumber(user.summary.email)}}
+            </div>
+            <div class="flex align-items-center">
+              <i class="pi pi-comment ml-2 mr-2"></i>
+              {{getMediaNumber(user.summary.chat)}}
+            </div>
+          </div>
+        </p-button>
+
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template #expandedrow let-user>
+    @if (user.interactions.length > 0) {
+    <tr>
+      <td colspan="8">
+
+
+        <p-table [value]="user.interactions">
+
+          <ng-template #header>
+            <tr>
+              <th id="channel">Channel</th>
+              <th id="direction" pSortableColumn="direction">
+                <div class="flex items-center gap-2">
+                  Direction
+                  <p-sortIcon field="direction" />
+                </div>
+              </th>
+              <th id="queue">Queue</th>
+              <th id="duration">Duration</th>
+            </tr>
+          </ng-template>
+
+          <ng-template #body let-interaction>
+            <tr>
+              <td>
+                @switch (interaction.channel) {
+                  @case ('voice') { <i class="pi pi-phone" ></i> }
+                  @case ('email') { <i class="pi pi-envelope" ></i> }
+                  @case ('chat') { <i class="pi pi-comment" ></i> }
+                }
+              </td>
+              <td>
+                @switch (interaction.direction) {
+                  @case ('outbound') { <i class="pi pi-arrow-up-right" ></i> }
+                  @case ('inbound') { <i class="pi pi-arrow-down-left" ></i> }
+                }
+              </td>
+              <td>{{interaction.queue ?? '-'}}</td>
+              <td>{{interaction.startTime | customTime:(clockSvc.now$ | async)}}</td>
+            </tr>
+          </ng-template>
+
+          <ng-template #emptymessage>
+            <tr>
+              <td colspan="4">No interactions found</td>
+            </tr>
+          </ng-template>
+
+        </p-table>
+
+
+      </td>
+    </tr>
+    }
+  </ng-template>
+
+</p-table>

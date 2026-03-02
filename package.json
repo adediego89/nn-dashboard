@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "angular-build-info && ng build",
+    "build-github-pages": "angular-build-info && ng build --output-path docs --base-href /nn-dashboard/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -23,12 +24,19 @@
   "private": true,
   "packageManager": "npm@11.9.0",
   "dependencies": {
+    "@angular-builders/custom-webpack": "^21.0.3",
     "@angular/common": "^21.1.0",
     "@angular/compiler": "^21.1.0",
     "@angular/core": "^21.1.0",
     "@angular/forms": "^21.1.0",
     "@angular/platform-browser": "^21.1.0",
     "@angular/router": "^21.1.0",
+    "@ngx-translate/core": "^17.0.0",
+    "@primeuix/themes": "^2.0.3",
+    "primeflex": "^4.0.0",
+    "primeicons": "^7.0.0",
+    "primeng": "^21.1.1",
+    "purecloud-platform-client-v2": "^245.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
