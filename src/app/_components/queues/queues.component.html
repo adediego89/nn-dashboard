@@ -1,8 +1,12 @@
 <p-table [value]="(queuesSvc.$queues | async)!"  dataKey="id" [scrollable]="true" scrollHeight="flex">
 
   <ng-template #caption>
-    <div class="flex justify-content-center">
+    <div class="flex justify-content-between align-items-center">
+      <div></div>
       <h4 class="m-0">Queues</h4>
+      <div>
+        <p-button text severity="secondary" [icon]="status() === PanelStatusEnum.COLLAPSED ? 'pi pi-lock' : 'pi pi-unlock'" (onClick)="toggleStatus.emit()"></p-button>
+      </div>
     </div>
   </ng-template>
 

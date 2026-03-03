@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AgentsComponent } from '../agents/agents.component';
 import { QueuesComponent } from '../queues/queues.component';
-import { SplitterModule } from 'primeng/splitter';
 import { PanelStatusEnum } from '../../_models';
+import { DrawerModule } from 'primeng/drawer';
 
 @Component({
   selector: 'app-home',
@@ -13,10 +13,25 @@ import { PanelStatusEnum } from '../../_models';
     CommonModule,
     AgentsComponent,
     QueuesComponent,
-    SplitterModule
+    DrawerModule,
   ]
 })
 export class HomeComponent {
-  queueStatus: PanelStatusEnum = PanelStatusEnum.COLLAPSED;
-  agentStatus: PanelStatusEnum = PanelStatusEnum.COLLAPSED;
+  queueStatus: PanelStatusEnum = PanelStatusEnum.MINIMIZED;
+  agentStatus: PanelStatusEnum = PanelStatusEnum.EXPANDED;
+  isVisible = false;
+  protected readonly panelStatus = PanelStatusEnum;
+
+  toggleSidebar() {
+    this.isVisible = !this.isVisible;
+  }
+
+  toggleQueueStatus() {
+    if (this.queueStatus === PanelStatusEnum.COLLAPSED) {
+      this.isVisible = false;
+      this.queueStatus = PanelStatusEnum.MINIMIZED;
+    } else {
+      this.queueStatus = PanelStatusEnum.COLLAPSED;
+    }
+  }
 }

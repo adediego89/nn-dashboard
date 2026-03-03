@@ -1,18 +1,28 @@
 <p-table [value]="(agentsSvc.$agents | async)!" [paginator]="true" [rows]="50" dataKey="id" [scrollable]="true" scrollHeight="flex">
 
   <ng-template #caption>
-    <div class="flex justify-content-center">
+    <div class="flex justify-content-between align-items-center">
+      <div>
+          <p-button text icon="pi pi-list" severity="secondary" (onClick)="toggleSidebar.emit()" [ngStyle]="{visibility: queueStatus() === panelStatus.COLLAPSED ? 'visible' : 'hidden'}"></p-button>
+      </div>
       <h4 class="m-0">Agents</h4>
+      <div>
+
+      </div>
     </div>
   </ng-template>
 
   <ng-template #header>
     <tr>
       <th id="name" pSortableColumn="name">
-        <div class="flex align-items-center gap-2">
-          Name
-          <p-sortIcon field="name" />
+        <div class="flex align-items-center justify-content-between">
+          <div class="flex align-items-center gap-2">
+            Name
+            <p-sortIcon field="name" />
+          </div>
+          <p-columnFilter field="name" display="menu"></p-columnFilter>
         </div>
+
       </th>
       <th id="presence" pSortableColumn="presence.presenceDefinition.systemPresence">
         <div class="flex align-items-center gap-2">

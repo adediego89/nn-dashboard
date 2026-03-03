@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -27,8 +27,11 @@ import { CustomTimePipe, StatusNamePipe } from '../../_pipes';
 })
 export class AgentsComponent {
   status = input.required<PanelStatusEnum>();
+  queueStatus = input.required<PanelStatusEnum>();
   public readonly agentsSvc = inject(AgentsService);
   public readonly clockSvc = inject(ClockService);
+  toggleSidebar = output();
+  protected readonly panelStatus = PanelStatusEnum;
 
   getTagColor (systemPresence: SystemPresenceType) {
     switch (systemPresence.toLowerCase()) {

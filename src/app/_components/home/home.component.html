@@ -1,10 +1,18 @@
 
 
-<div class="flex h-full">
-  <app-queues [status]="queueStatus"></app-queues>
-  <div class="flex-1 h-100" style="border-left: 1px solid lightgray">
-    <app-agents [status]="agentStatus"></app-agents>
+<div class="flex w-full h-full">
+  @if (queueStatus !== panelStatus.COLLAPSED) {
+    <app-queues [status]="queueStatus" (toggleStatus)="toggleQueueStatus()"></app-queues>
+  }
+  <div class="flex-1 h-100" style="border-left: 1px solid lightgray;">
+    <app-agents [status]="agentStatus" [queueStatus]="queueStatus" (toggleSidebar)="toggleSidebar()"></app-agents>
   </div>
-
 </div>
 
+<p-drawer [(visible)]="isVisible" [style]="{'width': 'auto'}" [maskStyle]="{background: 'transparent!important'}">
+  <ng-template #headless>
+    @if (queueStatus === panelStatus.COLLAPSED) {
+      <app-queues [status]="queueStatus" (toggleStatus)="toggleQueueStatus()"></app-queues>
+    }
+  </ng-template>
+</p-drawer>
