@@ -66,6 +66,7 @@
         </div>
       </th>
       <th id="summary">Interactions Summary</th>
+      <th id="voiceQueue">Queue</th>
     </tr>
   </ng-template>
 
@@ -75,13 +76,13 @@
       <td>
         <div class="flex align-items-center">
           <i class="pi pi-circle-on ml-2 mr-2" style="font-size: 12px" [style.color]="getTagColor(user.presence.presenceDefinition.systemPresence)"></i>
-          {{user.presence.presenceDefinition.id | statusName}}
+          {{ user.presence.presenceDefinition.id | statusName }}
         </div>
       </td>
-      <td>{{user.presence.modifiedDate | customTime:(clockSvc.now$ | async)}}</td>
+      <td>{{ user.presence.modifiedDate | customTime:(clockSvc.now$ | async) }}</td>
       <td>{{ user.routingStatus.status}}</td>
-      <td>{{user.routingStatus.startTime | customTime:(clockSvc.now$ | async)}}</td>
-      <td>{{getGroupNames(user.groups)}}</td>
+      <td>{{ user.routingStatus.startTime | customTime:(clockSvc.now$ | async) }}</td>
+      <td>{{ getGroupNames(user.groups) }}</td>
       <td>
         <p-button type="button"
                   [pRowToggler]="user"
@@ -106,6 +107,7 @@
         </p-button>
 
       </td>
+      <td>{{ getVoiceQueue(user) | queueName }}</td>
     </tr>
   </ng-template>
 
@@ -128,6 +130,7 @@
               </th>
               <th id="queue">Queue</th>
               <th id="duration">Duration</th>
+              <th id="controls"></th>
             </tr>
           </ng-template>
 
@@ -146,8 +149,13 @@
                   @case ('inbound') { <i class="pi pi-arrow-down-left" ></i> }
                 }
               </td>
-              <td>{{interaction.queue ?? '-'}}</td>
+              <td>{{ interaction.queue | queueName }}</td>
               <td>{{interaction.startTime | customTime:(clockSvc.now$ | async)}}</td>
+              <td>
+                @if (agentsSvc.showMonitoring(interaction)) {
+                  <p-button size="small" severity="primary" text icon="pi pi-desktop" (onClick)="monitor(interaction)"></p-button>
+                }
+              </td>
             </tr>
           </ng-template>
 

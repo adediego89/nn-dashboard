@@ -10,7 +10,7 @@ export class UsersApiService {
 
   getUserMe(): Observable<Models.UserMe> {
     return from(this.apiInstance.getUsersMe({
-      expand: ['languagePreference', 'groups'],
+      expand: ['languagePreference', 'groups', 'authorization'],
     })).pipe(tap(data => this.me = data));
   }
 

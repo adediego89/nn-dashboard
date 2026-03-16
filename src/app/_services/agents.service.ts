@@ -5,7 +5,8 @@ import { GroupsApiService } from './api/groups-api.service';
 import { BehaviorSubject, filter, forkJoin, Observable} from 'rxjs';
 import { Models } from 'purecloud-platform-client-v2';
 import { NotificationApiService } from './api/notification-api.service';
-import { AgentStatus } from '../_models';
+import { AgentStatus, InteractionStatus } from '../_models';
+import { ConversationsApiService } from './api/conversations-api.service';
 
 @Injectable({providedIn: 'root'})
 export class AgentsService {
@@ -13,6 +14,7 @@ export class AgentsService {
   $agents = new BehaviorSubject<AgentStatus[]>([])
   private readonly usersApiSvc = inject(UsersApiService);
   private readonly groupsApiSvc = inject(GroupsApiService);
+  private readonly conversationsApiSvc = inject(ConversationsApiService);
   private readonly notificationsApiSvc = inject(NotificationApiService);
 
   constructor() {
@@ -83,11 +85,13 @@ export class AgentsService {
                   channel: 'voice',
                   direction: userPart.direction,
                   queue: userPart.queue?.id ?? '',
-                  startTime: new Date().toISOString()
+                  startTime: new Date().toISOString(),
+                  participantId: userPart.id
                 });
               } else if (foundIntIndex > -1 && userPart?.endTime) {
                 found.interactions.splice(foundIntIndex, 1);
               }
+              console.log(found.interactions.length, found.interactions);
               break;
             default: break;
           }
@@ -101,6 +105,17 @@ export class AgentsService {
 
   addAgentsToMonitoring(ids: string[]) {
     this.notificationsApiSvc.addTopics(this.mapAgentTopics(ids));
+  }
+
+  startMonitoring(cId: string, pId: string) {
+    this.conversationsApiSvc.monitor(cId, pId).subscribe();
+  }
+
+  showMonitoring(interaction: InteractionStatus): boolean {
+    if (interaction.channel !== 'voice') return false;
+    const found = this.usersApiSvc.me?.authorization?.permissions?.find(e => e.startsWith('conversation:call:monitor'));
+    return !!found;
+
   }
 
   private mapAgentTopics(ids: string[]): string[] {

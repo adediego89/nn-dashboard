@@ -33,4 +33,5 @@ export interface InteractionStatus {
   direction: string;
   queue: string;
   startTime: string;
+  participantId: string;
 }

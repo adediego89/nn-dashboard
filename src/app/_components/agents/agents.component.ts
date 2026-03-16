@@ -6,8 +6,9 @@ import { Button } from 'primeng/button';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { Models } from 'purecloud-platform-client-v2';
 import { AgentsService, ClockService } from '../../_services';
-import { SystemPresenceType, PanelStatusEnum } from '../../_models';
+import { SystemPresenceType, PanelStatusEnum, AgentStatus, InteractionStatus } from '../../_models';
 import { CustomTimePipe, StatusNamePipe } from '../../_pipes';
+import { QueueNamePipe } from '../../_pipes/queue-name.pipe';
 
 
 @Component({
@@ -21,7 +22,8 @@ import { CustomTimePipe, StatusNamePipe } from '../../_pipes';
     CustomTimePipe,
     Button,
     FormsModule,
-    MultiSelectModule
+    MultiSelectModule,
+    QueueNamePipe
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -59,6 +61,15 @@ export class AgentsComponent {
 
   getGroupNames(groupNames: string[]) {
     return groupNames.join(', ');
+  }
+
+  getVoiceQueue(agent: AgentStatus): string | undefined {
+    const foundVoice = agent.interactions.find(e => e.channel.includes('voice'));
+    return foundVoice ? foundVoice.queue : undefined;
+  }
+
+  monitor(interaction: InteractionStatus) {
+    this.agentsSvc.startMonitoring(interaction.id, interaction.participantId);
   }
 
 }

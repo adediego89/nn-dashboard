@@ -8,6 +8,7 @@ import { UsersApiService } from './api/users-api.service';
 import { PresenceApiService } from './api/presence-api.service';
 import { TranslateService } from '@ngx-translate/core';
 import { GroupsApiService } from './api/groups-api.service';
+import { RoutingApiService } from './api/routing-api.service';
 
 
 interface State {
@@ -32,6 +33,7 @@ export class AuthService {
   private qParams?: Params;
   private readonly usersApiService = inject(UsersApiService);
   private readonly presenceApiService = inject(PresenceApiService);
+  private readonly routingApiService = inject(RoutingApiService);
   private readonly groupsApiService = inject(GroupsApiService);
   private readonly translate = inject(TranslateService);
 
@@ -47,6 +49,7 @@ export class AuthService {
 
     return this.loginImplicitGrant(state).pipe(
       mergeMap(() => this.presenceApiService.getPresenceDefinitions()),
+      mergeMap(() => this.routingApiService.getAllQueues()),
       mergeMap(() => this.usersApiService.getUserMe()),
       tap<Models.UserMe>(data => {
         this.userMe.next(data);

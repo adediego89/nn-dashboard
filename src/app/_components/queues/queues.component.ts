@@ -15,7 +15,7 @@ import { Button } from 'primeng/button';
     TableModule,
     CustomTimePipe,
     Button
-  ]
+  ],
 })
 export class QueuesComponent {
   status = input.required<PanelStatusEnum>();
