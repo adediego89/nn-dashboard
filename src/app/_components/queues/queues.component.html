@@ -1,4 +1,12 @@
-<p-table [value]="(queuesSvc.$queues | async)!"  dataKey="id" [scrollable]="true" scrollHeight="flex">
+<p-table [value]="(queuesSvc.$queues | async)!"
+         dataKey="id"
+         [scrollable]="true"
+         scrollHeight="flex"
+         [filters]="filters()"
+         (onFilter)="onFilter($event)"
+         sortField="waiting"
+         [sortOrder]="sortOrder()"
+         (onSort)="onSort($event)">
 
   <ng-template #caption>
     <div class="flex justify-content-between align-items-center">
@@ -12,6 +20,7 @@
 
   <ng-template #header>
     <tr>
+      <th></th>
       <th id="name" pSortableColumn="name">
         <div class="flex align-items-center justify-content-between">
           <div class="flex align-items-center gap-2">
@@ -27,12 +36,20 @@
           <p-sortIcon field="waiting" />
         </div>
       </th>
-<!--      <th id="longest">Longest</th>-->
     </tr>
   </ng-template>
 
   <ng-template #body let-queue let-expanded="expanded">
     <tr style="line-height: 2.1rem">
+      <td>
+        <p-button type="button"
+                  [pRowToggler]="queue"
+                  severity="secondary"
+                  [text]="true"
+                  [size]="'small'"
+                  [icon]="expanded && queue.interactions.length > 0 ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                  [disabled]="queue.interactions.length === 0"/>
+      </td>
       <td class="test">
         <span class="text">{{ queue.name }}</span></td>
       <td>
@@ -43,40 +60,47 @@
           }
         </div>
       </td>
-<!--      <td>{{ queue.longest ? (queue.longest | customTime:(clockSvc.now$ | async)) : '-' }}</td>-->
     </tr>
   </ng-template>
 
   <ng-template #expandedrow let-queue>
+    @if (queue.interactions.length > 0) {
     <tr>
-      <td colspan="4">
-        <div class="p-4">
+      <td colspan="3">
+
           <p-table [value]="queue.interactions" dataKey="id">
             <ng-template #header>
               <tr>
+                <th id="media">Type</th>
+                <th id="direction">Direction</th>
                 <th id="ani">ANI</th>
                 <th id="dnis">DNIS</th>
-                <th id="direction">Direction</th>
                 <th id="time">Time</th>
+                <th id="actions"></th>
               </tr>
             </ng-template>
             <ng-template #body let-interaction>
               <tr>
-                <td>{{ interaction.ani }}</td>
-                <td>{{ interaction.dnis }}</td>
+                <td>{{ interaction.mediaType }}</td>
                 <td>{{ interaction.direction }}</td>
-                <td>{{ interaction.timeInQueue }}</td>
+                <td>{{ interaction.ani | phoneFormat }}</td>
+                <td>{{ interaction.dnis | phoneFormat }}</td>
+                <td>{{ interaction.activityDate | customTime:(clockSvc.now$ | async) }}</td>
+                <td>
+                  <p-button size="small" severity="primary" text icon="pi pi-directions-alt" (onClick)="assignToMe(interaction)"></p-button>
+                </td>
               </tr>
             </ng-template>
             <ng-template #emptymessage>
               <tr>
-                <td colspan="4">No Waiting interactions in this queue</td>
+                <td colspan="6">No Waiting interactions in this queue</td>
               </tr>
             </ng-template>
           </p-table>
-        </div>
+
       </td>
     </tr>
+    }
   </ng-template>
 
 </p-table>

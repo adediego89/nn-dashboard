@@ -13,13 +13,13 @@ export class RoutingApiService {
   getAllQueues(force: boolean = false) {
     if (this.queues.length > 0 && !force) return of(this.queues);
 
-    return this.getQueuesPage(0).pipe(
+    return this.getQueuesPage(1).pipe(
       switchMap(listing => {
         if (listing.pageCount && listing.pageCount > 1) {
           const observables = [
             of(listing.entities!)
           ];
-          for (let i = 1; i < listing.pageCount; i++) {
+          for (let i = 2; i <= listing.pageCount; i++) {
             observables.push(this.getQueuesPage(i).pipe(map(res => res.entities!)))
           }
           return forkJoin(observables).pipe(map(res => res.flat(1)));
@@ -34,13 +34,13 @@ export class RoutingApiService {
   getQueuesByDivision(divisionId: string, force: boolean = false) {
     if (this.myDivisionQueues.length > 0 && !force) return of(this.myDivisionQueues);
 
-    return this.getQueuesByDivisionPage([divisionId], 0).pipe(
+    return this.getQueuesByDivisionPage([divisionId], 1).pipe(
       switchMap(listing => {
         if (listing.pageCount && listing.pageCount > 1) {
           const observables = [
             of(listing.entities!)
           ];
-          for (let i = 1; i < listing.pageCount; i++) {
+          for (let i = 2; i <= listing.pageCount; i++) {
             observables.push(this.getQueuesByDivisionPage([divisionId], i).pipe(map(res => res.entities!)))
           }
           return forkJoin(observables).pipe(map(res => res.flat(1)));

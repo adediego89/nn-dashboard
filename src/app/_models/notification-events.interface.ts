@@ -10,5 +10,14 @@ export interface MediaActivity {
 export interface MetricCounter {
   metric: string;
   count: number;
+  qualifier?: string;
   calculatedMetricValue?: number;
+}
+
+export interface ConversationsQueueActivity {
+  data: MetricCounter[];
+  entities: any[];
+  group: {
+    queueId: string;
+  }
 }

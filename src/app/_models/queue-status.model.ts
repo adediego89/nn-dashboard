@@ -3,7 +3,7 @@ import { Models } from 'purecloud-platform-client-v2';
 export class QueueStatus {
   id: string;
   name: string;
-  interactions: QueueInteractions[];
+  interactions: Models.ConversationActivityEntityData[];
   waiting: number = 0;
   longest?: Date;
 
@@ -13,11 +13,4 @@ export class QueueStatus {
     this.interactions = [];
   }
 
-}
-
-export interface QueueInteractions {
-  ani: string;
-  dnis: string;
-  direction: string;
-  time: string;
 }

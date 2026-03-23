@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Models, NotificationsApi } from 'purecloud-platform-client-v2';
-import { catchError, from, Observable, Subject, Subscriber, switchMap, tap } from 'rxjs';
+import { catchError, from, Observable, Subject, Subscriber, Subscription, switchMap, tap } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
 
@@ -11,9 +11,10 @@ interface NotificationEvent {
   version: string;
 }
 
-
 @Injectable({providedIn: 'root'})
 export class NotificationApiService {
+
+  static readonly CONVERSATIONS_ACTIVITY_TOPIC = 'v2.analytics.conversations.activity.queue';
 
   private readonly apiInstance = new NotificationsApi();
   private ws?: WebSocket;
@@ -21,33 +22,33 @@ export class NotificationApiService {
   private channel?: Models.Channel;
   private readonly authService = inject(AuthService);
   $messages = new Subject<NotificationEvent>();
+  private notificationsSub?: Subscription;
 
   constructor() {
-    this.createNotificationChannel()
-      .pipe(
-        tap(channel => this.channel = channel),
-        switchMap(channel => this.create(channel.connectUri!)),
-        map(messageEvent => JSON.parse(messageEvent.data)))
-      .subscribe(data => {
-        console.log(`[NotificationApi][Message]`, data);
-        this.$messages.next(data);
-    });
+    this.notificationInitialize();
   }
 
   getSocketState(){
     return this.ws?.readyState;
   }
 
-  // notificationStart(topics: string[]) {
-  //   this.topics = topics;
-  //   return this.createNotificationChannel().pipe(
-  //     switchMap(channel => this.setNotificationSubscriptions(channel)),
-  //     switchMap(channel => this.create(channel.connectUri!)),
-  //     map(messageEvent => JSON.parse(messageEvent.data)),
-  //     filter(eventData => this.topics.includes(eventData.topicName)),
-  //     map(eventData => eventData.eventBody)
-  //   );
-  // }
+  notificationInitialize() {
+
+    if (this.notificationsSub) {
+      this.notificationsSub.unsubscribe();
+    }
+
+    this.notificationsSub = this.createNotificationChannel()
+      .pipe(
+        tap(channel => this.channel = channel),
+        switchMap(() => this.updateNotificationSubscriptions()),
+        switchMap(() => this.create(this.channel?.connectUri!)),
+        map(messageEvent => JSON.parse(messageEvent.data)))
+      .subscribe(data => {
+        console.log(`[NotificationApi][Message]`, data);
+        this.$messages.next(data);
+      });
+  }
 
   addTopics(topics: string[]) {
     for (const topic of topics) {
@@ -60,6 +61,11 @@ export class NotificationApiService {
 
   removeTopics(topics: string[]) {
     this.topics = this.topics.filter(topic => !topics.includes(topic))
+  }
+
+  replaceConversationActivityTopics(topics: string[]) {
+    this.topics = this.topics.filter(topic => !topic.startsWith(NotificationApiService.CONVERSATIONS_ACTIVITY_TOPIC));
+    this.addTopics(topics);
   }
 
   private createNotificationChannel() {

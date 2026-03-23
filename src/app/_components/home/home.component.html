@@ -2,7 +2,12 @@
 
 <div class="flex w-full h-full">
   @if (queueStatus !== panelStatus.COLLAPSED) {
-    <app-queues [status]="queueStatus" (toggleStatus)="toggleQueueStatus()"></app-queues>
+    <app-queues [status]="queueStatus"
+                (toggleStatus)="toggleQueueStatus()"
+                [(filters)]="filters"
+                [(sortOrder)]="sortOrder">
+
+    </app-queues>
   }
   <div class="flex-1 h-100" style="border-left: 1px solid lightgray;">
     <app-agents [status]="agentStatus" [queueStatus]="queueStatus" (toggleSidebar)="toggleSidebar()"></app-agents>
@@ -12,7 +17,13 @@
 <p-drawer [(visible)]="isVisible" [style]="{'width': 'auto'}" [maskStyle]="{background: 'transparent!important'}">
   <ng-template #headless>
     @if (queueStatus === panelStatus.COLLAPSED) {
-      <app-queues [status]="queueStatus" (toggleStatus)="toggleQueueStatus()"></app-queues>
+      <app-queues [status]="queueStatus"
+                  (toggleStatus)="toggleQueueStatus()"
+                  [(filters)]="filters"
+                  [(sortOrder)]="sortOrder"
+                  style="height: 100%">
+
+      </app-queues>
     }
   </ng-template>
 </p-drawer>
