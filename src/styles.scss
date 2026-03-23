@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "primeicons/primeicons.css";
+@import 'material-symbols';
 
 html {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
@@ -16,4 +17,21 @@ body {
   font-size: 13px;
   font-weight: normal;
   background: var(--p-surface-100);
+}
+
+.inbound {
+  transform: rotate(180deg);
+}
+
+.material-symbols-outlined {
+  font-size: 21px;
+}
+
+.extendedCell {
+  padding: 1rem;
+  background-color: var(--p-surface-100);
+}
+
+.smallCell {
+  width: 120px;
 }

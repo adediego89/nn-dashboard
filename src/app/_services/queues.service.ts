@@ -97,7 +97,6 @@ export class QueuesService {
 
     this.conversationsApiSvc.queueConversationsQuery(ids).subscribe(data => {
       // Initialize queues from data
-      console.log(data);
       const queues = this.$queues.getValue();
       if (data.results) {
         for (const queueData of data.results) {

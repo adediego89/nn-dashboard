@@ -1,4 +1,10 @@
-<p-table [value]="(agentsSvc.$agents | async)!" [paginator]="true" [rows]="50" dataKey="id" [scrollable]="true" scrollHeight="flex">
+<p-table [value]="(agentsSvc.$agents | async)!"
+         [size]="'small'"
+         [paginator]="true"
+         [rows]="50"
+         dataKey="id"
+         [scrollable]="true"
+         scrollHeight="flex">
 
   <ng-template #caption>
     <div class="flex justify-content-between align-items-center">
@@ -114,40 +120,54 @@
   <ng-template #expandedrow let-user>
     @if (user.interactions.length > 0) {
     <tr>
-      <td colspan="8">
+      <td colspan="8" class="extendedCell">
 
-
-        <p-table [value]="user.interactions">
+        <p-table [value]="user.interactions" [size]="'small'">
 
           <ng-template #header>
             <tr>
-              <th id="channel">Channel</th>
-              <th id="direction" pSortableColumn="direction">
+              <th id="channel" class="smallCell" pSortableColumn="channel">
+                <div class="flex items-center gap-2">
+                  Channel
+                  <p-sortIcon field="channel" />
+                </div>
+              </th>
+              <th id="direction" class="smallCell" pSortableColumn="direction">
                 <div class="flex items-center gap-2">
                   Direction
                   <p-sortIcon field="direction" />
                 </div>
               </th>
-              <th id="queue">Queue</th>
-              <th id="duration">Duration</th>
-              <th id="controls"></th>
+              <th id="queue" class="smallCell" pSortableColumn="queue">
+                <div class="flex items-center gap-2">
+                  Queue
+                  <p-sortIcon field="queue" />
+                </div>
+              </th>
+              <th id="duration" class="smallCell" pSortableColumn="duration">
+                <div class="flex items-center gap-2">
+                  Duration
+                  <p-sortIcon field="duration" />
+                </div>
+              </th>
+              <th id="controls" class="smallCell"></th>
             </tr>
           </ng-template>
 
           <ng-template #body let-interaction>
             <tr>
               <td>
-                @switch (interaction.channel) {
-                  @case ('voice') { <i class="pi pi-phone" ></i> }
-                  @case ('email') { <i class="pi pi-envelope" ></i> }
-                  @case ('chat') { <i class="pi pi-comment" ></i> }
-                }
+                <span class="material-symbols-outlined">
+                    @switch (interaction.channel) {
+                      @case ('voice') { call }
+                      @case ('email') { mail }
+                      @case ('chat') { chat }
+                      @case ('callback') { phone_callback }
+                    }
+                </span>
               </td>
               <td>
-                @switch (interaction.direction) {
-                  @case ('outbound') { <i class="pi pi-arrow-up-right" ></i> }
-                  @case ('inbound') { <i class="pi pi-arrow-down-left" ></i> }
-                }
+                <span class="material-symbols-outlined" [class.inbound]="interaction.direction === 'inbound'">outbound</span>
               </td>
               <td>{{ interaction.queue | queueName }}</td>
               <td>{{interaction.startTime | customTime:(clockSvc.now$ | async)}}</td>

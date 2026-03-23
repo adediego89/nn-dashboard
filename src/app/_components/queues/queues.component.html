@@ -6,7 +6,8 @@
          (onFilter)="onFilter($event)"
          sortField="waiting"
          [sortOrder]="sortOrder()"
-         (onSort)="onSort($event)">
+         (onSort)="onSort($event)"
+         [size]="'small'">
 
   <ng-template #caption>
     <div class="flex justify-content-between align-items-center">
@@ -20,7 +21,7 @@
 
   <ng-template #header>
     <tr>
-      <th></th>
+      <th id="expansion" style="width: 50px"></th>
       <th id="name" pSortableColumn="name">
         <div class="flex align-items-center justify-content-between">
           <div class="flex align-items-center gap-2">
@@ -66,26 +67,52 @@
   <ng-template #expandedrow let-queue>
     @if (queue.interactions.length > 0) {
     <tr>
-      <td colspan="3">
+      <td colspan="3" class="extendedCell">
 
-          <p-table [value]="queue.interactions" dataKey="id">
+          <p-table [value]="queue.interactions" dataKey="id" [size]="'small'">
             <ng-template #header>
               <tr>
-                <th id="media">Type</th>
-                <th id="direction">Direction</th>
+                <th id="mediaType" class="smallCell" pSortableColumn="mediaType">
+                  <div class="flex items-center gap-2">
+                    Type
+                    <p-sortIcon field="mediaType" />
+                  </div>
+                </th>
+                <th id="direction" class="smallCell" pSortableColumn="direction">
+                  <div class="flex items-center gap-2">
+                    Direction
+                    <p-sortIcon field="direction" />
+                  </div>
+                </th>
+                <th id="activityDate" class="smallCell" pSortableColumn="activityDate">
+                  <div class="flex items-center gap-2">
+                    Time
+                    <p-sortIcon field="activityDate" />
+                  </div>
+                </th>
                 <th id="ani">ANI</th>
                 <th id="dnis">DNIS</th>
-                <th id="time">Time</th>
-                <th id="actions"></th>
+                <th id="actions" class="smallCell"></th>
               </tr>
             </ng-template>
             <ng-template #body let-interaction>
               <tr>
-                <td>{{ interaction.mediaType }}</td>
-                <td>{{ interaction.direction }}</td>
+                <td>
+                  <span class="material-symbols-outlined">
+                    @switch (interaction.mediaType) {
+                      @case ('voice') { call }
+                      @case ('email') { mail }
+                      @case ('chat') { chat }
+                      @case ('callback') { phone_callback }
+                    }
+                  </span>
+                </td>
+                <td>
+                  <span class="material-symbols-outlined" [class.inbound]="interaction.direction === 'inbound'">outbound</span>
+                </td>
+                <td>{{ interaction.activityDate | customTime:(clockSvc.now$ | async) }}</td>
                 <td>{{ interaction.ani | phoneFormat }}</td>
                 <td>{{ interaction.dnis | phoneFormat }}</td>
-                <td>{{ interaction.activityDate | customTime:(clockSvc.now$ | async) }}</td>
                 <td>
                   <p-button size="small" severity="primary" text icon="pi pi-directions-alt" (onClick)="assignToMe(interaction)"></p-button>
                 </td>

@@ -1,3 +1,5 @@
+[0.0.6]
+- Styling update: Cell paddings, extended row background and padding, icons, colors, ...
 [0.0.5]
 - Queue conversations tracking
 - Conversation "assign to me" button
