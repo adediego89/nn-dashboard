@@ -1,0 +1,44 @@
+{
+  "agents": {
+    "title": "Doradcy",
+    "columns": {
+      "name": "Doradca",
+      "presence": "Status",
+      "presenceTime": "Czas w statusie",
+      "routing": "Status routingu",
+      "routingTime": "Czas w statusie routingu",
+      "summary": "Obsługiwane interakcje",
+      "groups": "Grupy"
+    },
+    "routingStatus": {
+      "OFF_QUEUE": "Poza kolejką",
+      "IN_QUEUE": "W kolejce",
+      "INTERACTING": "W interakcji",
+      "IDLE": "Bezczynny",
+      "NOT_RESPONDING": "Nie odpowiada",
+      "COMMUNICATING": "Komunikacja"
+    }
+  },
+  "queues": {
+    "title": "Kolejki",
+    "columns": {
+      "name": "Kolejka",
+      "waiting": "Oczekujące"
+    }
+  },
+  "interactions": {
+    "type": "Media",
+    "direction": "Kierunek",
+    "duration": "Czas trwania",
+    "timeInQueue": "Czas w kolejce",
+    "monitor": "Monitoruj",
+    "assignToMe": "Przypisz do mnie",
+    "ani": "Z",
+    "dnis": "Do",
+    "notFound": "Nie znaleziono interakcji",
+    "notFoundQueue": "Brak interakcji oczekujących w tej kolejce"
+  },
+  "shared": {
+    "queue": "Kolejka"
+  }
+}

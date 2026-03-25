@@ -9,6 +9,7 @@ import { PhoneFormatPipe } from '../../_pipes/phone-format.pipe';
 import { Models } from 'purecloud-platform-client-v2';
 import { FilterMetadata } from 'primeng/api';
 import { Tooltip } from 'primeng/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-queues',
@@ -20,7 +21,8 @@ import { Tooltip } from 'primeng/tooltip';
     CustomTimePipe,
     Button,
     PhoneFormatPipe,
-    Tooltip
+    Tooltip,
+    TranslatePipe
   ]
 })
 export class QueuesComponent {

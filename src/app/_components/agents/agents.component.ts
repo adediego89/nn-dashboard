@@ -10,6 +10,7 @@ import { SystemPresenceType, PanelStatusEnum, AgentStatus, InteractionStatus } f
 import { CustomTimePipe, StatusNamePipe } from '../../_pipes';
 import { QueueNamePipe } from '../../_pipes/queue-name.pipe';
 import { Tooltip } from 'primeng/tooltip';
+import { TranslatePipe } from '@ngx-translate/core';
 
 
 @Component({
@@ -25,7 +26,8 @@ import { Tooltip } from 'primeng/tooltip';
     FormsModule,
     MultiSelectModule,
     QueueNamePipe,
-    Tooltip
+    Tooltip,
+    TranslatePipe
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

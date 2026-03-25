@@ -1,3 +1,5 @@
+[0.0.9]
+- Translations EN,PL
 [0.0.8]
 - Group filtering key change (from _NN to TEAM_)
 [0.0.7]

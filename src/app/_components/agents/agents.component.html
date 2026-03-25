@@ -11,7 +11,7 @@
       <div>
           <p-button text size="small" icon="pi pi-list" severity="secondary" (onClick)="toggleSidebar.emit()" [ngStyle]="{visibility: queueStatus() === panelStatus.COLLAPSED ? 'visible' : 'hidden'}"></p-button>
       </div>
-      <h4 class="m-0">Agents</h4>
+      <h4 class="m-0">{{'agents.title' | translate}}</h4>
       <div>
 
       </div>
@@ -23,7 +23,7 @@
       <th id="name" pSortableColumn="name">
         <div class="flex align-items-center justify-content-between">
           <div class="flex align-items-center gap-2">
-            Name
+            {{'agents.columns.name' | translate}}
             <p-sortIcon field="name" />
           </div>
           <p-columnFilter field="name" display="menu"></p-columnFilter>
@@ -32,31 +32,31 @@
       </th>
       <th id="presence" pSortableColumn="presence.presenceDefinition.systemPresence">
         <div class="flex align-items-center gap-2">
-          Presence
+          {{'agents.columns.presence' | translate}}
           <p-sortIcon field="presence.presenceDefinition.systemPresence" />
         </div>
       </th>
       <th id="presenceTime" pSortableColumn="presence.modifiedDate">
         <div class="flex align-items-center gap-2">
-          Time (Presence)
+          {{'agents.columns.presenceTime' | translate}}
           <p-sortIcon field="presence.modifiedDate" />
         </div>
       </th>
       <th id="routing" pSortableColumn="routingStatus.status">
         <div class="flex align-items-center gap-2">
-          Routing
+          {{'agents.columns.routing' | translate}}
           <p-sortIcon field="routingStatus.status" />
         </div>
       </th>
       <th id="routingTime" pSortableColumn="routingStatus.startTime">
         <div class="flex align-items-center gap-2">
-          Time (Routing)
+          {{'agents.columns.routingTime' | translate}}
           <p-sortIcon field="routingStatus.startTime" />
         </div>
       </th>
       <th id="groups">
         <div class="flex align-items-center justify-content-between">
-          Groups
+          {{'agents.columns.groups' | translate}}
           <p-columnFilter field="groups" matchMode="inArray" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
             <ng-template #filter let-value let-filter="filterCallback">
               <p-multiselect [ngModel]="value"
@@ -71,8 +71,8 @@
           </p-columnFilter>
         </div>
       </th>
-      <th id="summary">Interactions Summary</th>
-      <th id="voiceQueue">Queue</th>
+      <th id="summary">{{'agents.columns.summary' | translate}}</th>
+      <th id="voiceQueue">{{'shared.queue' | translate}}</th>
     </tr>
   </ng-template>
 
@@ -86,7 +86,7 @@
         </div>
       </td>
       <td>{{ user.presence.modifiedDate | customTime:(clockSvc.now$ | async) }}</td>
-      <td>{{ user.routingStatus.status}}</td>
+      <td>{{ 'agents.routingStatus.' + user.routingStatus.status | translate}}</td>
       <td>{{ user.routingStatus.startTime | customTime:(clockSvc.now$ | async) }}</td>
       <td>{{ getGroupNames(user.groups) }}</td>
       <td>
@@ -128,25 +128,25 @@
             <tr>
               <th id="channel" class="smallCell" pSortableColumn="channel">
                 <div class="flex items-center gap-2">
-                  Channel
+                  {{'interactions.type' | translate}}
                   <p-sortIcon field="channel" />
                 </div>
               </th>
               <th id="direction" class="smallCell" pSortableColumn="direction">
                 <div class="flex items-center gap-2">
-                  Direction
+                  {{'interactions.direction' | translate}}
                   <p-sortIcon field="direction" />
                 </div>
               </th>
               <th id="queue" class="smallCell" pSortableColumn="queue">
                 <div class="flex items-center gap-2">
-                  Queue
+                  {{'shared.queue' | translate}}
                   <p-sortIcon field="queue" />
                 </div>
               </th>
               <th id="duration" class="smallCell" pSortableColumn="duration">
                 <div class="flex items-center gap-2">
-                  Duration
+                  {{'interactions.duration' | translate}}
                   <p-sortIcon field="duration" />
                 </div>
               </th>
@@ -178,7 +178,7 @@
                             severity="primary"
                             text
                             icon="pi pi-desktop"
-                            pTooltip="Monitor"
+                            [pTooltip]="'interactions.monitor' | translate"
                             (onClick)="monitor(interaction)">
 
                   </p-button>
@@ -189,7 +189,7 @@
 
           <ng-template #emptymessage>
             <tr>
-              <td colspan="4">No interactions found</td>
+              <td colspan="4">{{'interactions.notFound' | translate}}</td>
             </tr>
           </ng-template>
 
