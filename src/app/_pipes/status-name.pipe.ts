@@ -12,7 +12,7 @@ export class StatusNamePipe implements PipeTransform {
   transform(value: {id: string; systemPresence: string;}): string {
     let found = this.presenceApiService.presenceDefinitions.find(e => e.id === value.id);
     if (!found) {
-      const alternate = this.presenceApiService.presenceDefinitions.find(e => e.systemPresence === value.systemPresence && e.type === 'System');
+      const alternate = this.presenceApiService.presenceDefinitions.find(e => e.systemPresence?.toLowerCase() === value.systemPresence.toLowerCase() && e.type === 'System');
       if (!alternate) return value.systemPresence;
       found = alternate;
     }
