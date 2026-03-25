@@ -57,7 +57,7 @@ export class QueuesService {
             this.setMetricsToQueue(found, metrics);
           }
         } else if (event.topicName.startsWith('v2.analytics.conversations.activity.queue')) {
-          console.log(event.eventBody);
+          // console.log(event.eventBody);
           const queueId = topicSplit[5];
           const found = queues.find(e => e.id === queueId);
           if (found) {
@@ -123,6 +123,29 @@ export class QueuesService {
 
   assignInteraction(conversationId: string) {
     this.conversationsApiSvc.assignConversation(conversationId, this.usersApiSvc.me?.id!).subscribe(res => console.log(res));
+  }
+
+  isOnQueue(): boolean {
+    return this.usersApiSvc.me?.routingStatus?.status !== undefined && this.usersApiSvc.me?.routingStatus?.status !== 'OFF_QUEUE';
+  }
+
+  hasPermission(mediaType: string): boolean {
+    let foundPermission;
+    switch (mediaType) {
+      case 'voice':
+        foundPermission = this.usersApiSvc.me?.authorization?.permissions?.find(e => e.startsWith('conversation:call:assign'));
+        return !!foundPermission;
+      case 'email':
+        foundPermission = this.usersApiSvc.me?.authorization?.permissions?.find(e => e.startsWith('conversation:email:assign'));
+        return !!foundPermission;
+      case 'chat':
+        foundPermission = this.usersApiSvc.me?.authorization?.permissions?.find(e => e.startsWith('conversation:message:assign'));
+        return !!foundPermission;
+      case 'callback':
+        foundPermission = this.usersApiSvc.me?.authorization?.permissions?.find(e => e.startsWith('conversation:callback:assign'));
+        return !!foundPermission;
+      default: return false;
+    }
   }
 
   private mapTopics(ids: string[]): string[] {

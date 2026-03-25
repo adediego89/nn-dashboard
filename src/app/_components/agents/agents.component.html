@@ -82,7 +82,7 @@
       <td>
         <div class="flex align-items-center">
           <i class="pi pi-circle-on ml-2 mr-2" style="font-size: 12px" [style.color]="getTagColor(user.presence.presenceDefinition.systemPresence)"></i>
-          {{ user.presence.presenceDefinition.id | statusName }}
+          {{ user.presence.presenceDefinition | statusName }}
         </div>
       </td>
       <td>{{ user.presence.modifiedDate | customTime:(clockSvc.now$ | async) }}</td>
@@ -150,7 +150,7 @@
                   <p-sortIcon field="duration" />
                 </div>
               </th>
-              <th id="controls" class="smallCell"></th>
+              <th id="controls" class="actionCell"></th>
             </tr>
           </ng-template>
 
@@ -162,6 +162,7 @@
                       @case ('voice') { call }
                       @case ('email') { mail }
                       @case ('chat') { chat }
+                      @case ('message') { chat }
                       @case ('callback') { phone_callback }
                     }
                 </span>
@@ -173,7 +174,14 @@
               <td>{{interaction.startTime | customTime:(clockSvc.now$ | async)}}</td>
               <td>
                 @if (agentsSvc.showMonitoring(interaction)) {
-                  <p-button size="small" severity="primary" text icon="pi pi-desktop" (onClick)="monitor(interaction)"></p-button>
+                  <p-button size="small"
+                            severity="primary"
+                            text
+                            icon="pi pi-desktop"
+                            pTooltip="Monitor"
+                            (onClick)="monitor(interaction)">
+
+                  </p-button>
                 }
               </td>
             </tr>

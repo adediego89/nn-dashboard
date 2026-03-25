@@ -9,6 +9,7 @@ import { AgentsService, ClockService } from '../../_services';
 import { SystemPresenceType, PanelStatusEnum, AgentStatus, InteractionStatus } from '../../_models';
 import { CustomTimePipe, StatusNamePipe } from '../../_pipes';
 import { QueueNamePipe } from '../../_pipes/queue-name.pipe';
+import { Tooltip } from 'primeng/tooltip';
 
 
 @Component({
@@ -23,7 +24,8 @@ import { QueueNamePipe } from '../../_pipes/queue-name.pipe';
     Button,
     FormsModule,
     MultiSelectModule,
-    QueueNamePipe
+    QueueNamePipe,
+    Tooltip
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -92,7 +92,7 @@
                 </th>
                 <th id="ani">ANI</th>
                 <th id="dnis">DNIS</th>
-                <th id="actions" class="smallCell"></th>
+                <th id="actions" class="actionCell"></th>
               </tr>
             </ng-template>
             <ng-template #body let-interaction>
@@ -113,8 +113,18 @@
                 <td>{{ interaction.activityDate | customTime:(clockSvc.now$ | async) }}</td>
                 <td>{{ interaction.ani | phoneFormat }}</td>
                 <td>{{ interaction.dnis | phoneFormat }}</td>
+
                 <td>
-                  <p-button size="small" severity="primary" text icon="pi pi-directions-alt" (onClick)="assignToMe(interaction)"></p-button>
+                  @if (hasPermission(interaction.mediaType)) {
+                    <p-button size="small"
+                              severity="primary"
+                              text
+                              icon="pi pi-directions-alt"
+                              pTooltip="Assign to me"
+                              [disabled]="!isOnQueue()"
+                              (onClick)="assignToMe(interaction)">
+                    </p-button>
+                  }
                 </td>
               </tr>
             </ng-template>

@@ -51,11 +51,6 @@ export class AgentsService {
           }
           return acc;
         }, []))
-        // map(agents => agents.filter((obj1, i, arr) =>
-        //   // TODO: This should be replaced since we need to know which users belong to which groups
-        //   // So far this just removes
-        //   arr.findIndex(obj2 => (obj2.id === obj1.id)) === i
-        // ))
       )
       .subscribe(data => {
         this.$agents.next(data);
@@ -71,7 +66,7 @@ export class AgentsService {
         const found = this.$agents.value.find(e => e.id === userId);
 
         const participants = event.eventBody.participants;
-        const userPart = participants?.filter((p: any) => p.purpose === 'agent').findLast((p: any) => p.user.id === userId);
+        const userPart = participants?.filter((p: any) => p.purpose === 'agent' || p.purpose === 'user').findLast((p: any) => p.user.id === userId);
         if (found) {
           const foundIntIndex = found.interactions.findIndex(interaction => interaction.id === event.eventBody.id);
           switch (type) {
@@ -79,7 +74,9 @@ export class AgentsService {
             case 'routingStatus': found.routingStatus = event.eventBody.routingStatus; break;
             case 'conversationsummary': found.summary = event.eventBody; console.log('SummaryUpdate', found.summary); break;
             case 'calls':
+              console.log('calls message received', foundIntIndex, userPart);
               if (foundIntIndex === -1 && userPart && !userPart.endTime) {
+                console.log('calls add');
                 found.interactions.push({
                   id: event.eventBody.id,
                   channel: 'voice',
@@ -89,11 +86,47 @@ export class AgentsService {
                   participantId: userPart.id
                 });
               } else if (foundIntIndex > -1 && userPart?.endTime) {
+                console.log('calls remove');
                 found.interactions.splice(foundIntIndex, 1);
               }
-              console.log(found.interactions.length, found.interactions);
+              break;
+            case 'emails':
+              if (foundIntIndex === -1 && userPart && !userPart.endTime) {
+                found.interactions.push({
+                  id: event.eventBody.id,
+                  channel: 'email',
+                  direction: userPart.direction,
+                  queue: userPart.queue?.id ?? '',
+                  startTime: new Date().toISOString(),
+                  participantId: userPart.id
+                });
+              } else if (foundIntIndex > -1 && userPart?.endTime) {
+                found.interactions.splice(foundIntIndex, 1);
+              }
+              break;
+            case 'chats':
+              if (foundIntIndex === -1 && userPart && !userPart.endTime) {
+                found.interactions.push({
+                  id: event.eventBody.id,
+                  channel: 'chat',
+                  direction: userPart.direction,
+                  queue: userPart.queue?.id ?? '',
+                  startTime: new Date().toISOString(),
+                  participantId: userPart.id
+                });
+              } else if (foundIntIndex > -1 && userPart?.endTime) {
+                found.interactions.splice(foundIntIndex, 1);
+              }
               break;
             default: break;
+          }
+        } else if (userId === this.usersApiSvc.me?.id) {
+          if (this.usersApiSvc.me.presence && type === 'presence') {
+            this.usersApiSvc.me.presence.modifiedDate = event.eventBody.modifiedDate;
+            this.usersApiSvc.me.presence.presenceDefinition = event.eventBody.presenceDefinition;
+          }
+          if (this.usersApiSvc.me.routingStatus && type === 'routingStatus') {
+            this.usersApiSvc.me.routingStatus = event.eventBody;
           }
         }
       });
@@ -119,7 +152,11 @@ export class AgentsService {
   }
 
   private mapAgentTopics(ids: string[]): string[] {
-    return ids.map(id => `v2.users.${id}?presence&routingStatus&conversations.calls&conversations.emails&conversations.chats&conversationsummary`);
+    const topics = ids.map(id => `v2.users.${id}?presence&routingStatus&conversations.calls&conversations.emails&conversations.chats&conversationsummary`);
+    if (this.usersApiSvc.me?.id) {
+      topics.push(`v2.users.${this.usersApiSvc.me?.id}?presence&routingStatus`);
+    }
+    return topics;
   }
 
 }

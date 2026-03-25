@@ -1,3 +1,6 @@
+[0.0.7]
+- Non user's division status fallback to systemPresence implemented.
+- AssignToMe button conditional disabling implemented.
 [0.0.6]
 - Styling update: Cell paddings, extended row background and padding, icons, colors, ...
 [0.0.5]
