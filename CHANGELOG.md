@@ -1,3 +1,5 @@
+[0.0.8]
+- Group filtering key change (from _NN to TEAM_)
 [0.0.7]
 - Non user's division status fallback to systemPresence implemented.
 - AssignToMe button conditional disabling implemented.

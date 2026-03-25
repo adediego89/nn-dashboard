@@ -27,7 +27,7 @@ export class GroupsApiService {
             return of(response.entities!)
           }
         }),
-        map(groups => groups.filter(group => group.name.endsWith('_NN'))),
+        map(groups => groups.filter(group => group.name.startsWith('TEAM_'))),
         tap(groups => this.groups = groups)
       );
   }
