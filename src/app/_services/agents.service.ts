@@ -126,7 +126,7 @@ export class AgentsService {
             this.usersApiSvc.me.presence.presenceDefinition = event.eventBody.presenceDefinition;
           }
           if (this.usersApiSvc.me.routingStatus && type === 'routingStatus') {
-            this.usersApiSvc.me.routingStatus = event.eventBody;
+            this.usersApiSvc.me.routingStatus = event.eventBody.routingStatus;
           }
         }
       });
