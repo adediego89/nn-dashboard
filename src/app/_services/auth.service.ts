@@ -1,13 +1,12 @@
-import {inject, Injectable} from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import {ApiClient, AuthData, Models} from 'purecloud-platform-client-v2';
-import {CLIENT_ID_KEY, ENV_KEY, LANG_KEY} from '../_models';
+import { CLIENT_ID_KEY, ENV_KEY, LANG_KEY, PATH_KEY } from '../_models';
 import {Params} from '@angular/router';
 import { BehaviorSubject, from, mergeMap, Observable, tap } from 'rxjs';
 import {map} from 'rxjs/operators';
 import { UsersApiService } from './api/users-api.service';
 import { PresenceApiService } from './api/presence-api.service';
 import { TranslateService } from '@ngx-translate/core';
-import { GroupsApiService } from './api/groups-api.service';
 import { RoutingApiService } from './api/routing-api.service';
 
 
@@ -19,27 +18,25 @@ interface State {
 @Injectable({providedIn: 'root'})
 export class AuthService {
 
-  isAuthorized = new BehaviorSubject<boolean>(false);
+  private readonly _isAuthorized = signal(false);
+  isAuthorized = this._isAuthorized.asReadonly();
   userMe = new BehaviorSubject<Models.UserMe | null>(null);
 
   private readonly client = ApiClient.instance;
   // Authorization values
   private language: string = 'en-us';
   private environment: string = 'mypurecloud.de';
-  private clientId: string = '';
   private authData?: AuthData;
   // State params (QueryParams)
-  private path?: string;
   private qParams?: Params;
   private readonly usersApiService = inject(UsersApiService);
   private readonly presenceApiService = inject(PresenceApiService);
   private readonly routingApiService = inject(RoutingApiService);
-  private readonly groupsApiService = inject(GroupsApiService);
   private readonly translate = inject(TranslateService);
 
-  login(path?: string, qParams?: Params) {
-
-    this.initializeParams(qParams);
+  login(qParams?: Params, url?: string) {
+    console.log('login', url);
+    this.initializeParams(qParams, url);
 
     this.client.setPersistSettings(true, 'agent-status-widget');
     this.client.setEnvironment(this.environment);
@@ -47,7 +44,7 @@ export class AuthService {
     const obj: State = {path: window.location.pathname, params: qParams};
     const state = btoa(JSON.stringify(obj));
 
-    return this.loginImplicitGrant(state).pipe(
+    return this.loginPKCEGrant(state).pipe(
       mergeMap(() => this.presenceApiService.getPresenceDefinitions()),
       mergeMap(() => this.routingApiService.getAllQueues()),
       mergeMap(() => this.usersApiService.getUserMe()),
@@ -61,57 +58,49 @@ export class AuthService {
       map<Models.UserMe, boolean>(() => true));
   }
 
-  isTokenValid(): boolean {
-    if (!this.authData) return false;
-    return Date.now() < this.authData?.tokenExpiryTime;
-  }
-
-  getToken(): string | undefined {
-    return this.authData?.accessToken
-  }
-
-  getMe() {
-    return this.userMe.value;
-  }
-
   doAuth() {
-    const params = this.buildParams();
-    this.login(undefined, params).subscribe();
+    this.login(this.buildParams()).subscribe();
   }
 
-  private loginImplicitGrant(state: string): Observable<AuthData> {
-    return from(this.client.loginImplicitGrant(
-      this.clientId,
-      window.location.origin + window.location.pathname,
-      {state: state}))
-      .pipe(
-        map(data => {
-          this.authData = data;
-          this.isAuthorized.next(true);
-          if (data.state) {
-            const actualState: State = JSON.parse(atob(data.state));
-            this.path = actualState.path;
-            this.qParams = actualState.params;
-            this.initializeParams(this.qParams);
-            console.log(`[AuthService] ClientId: ${this.clientId}`);
-          }
-          return data;
-        })
-      );
+  private loginPKCEGrant(state: string): Observable<AuthData> {
+    console.log('loginPKCEGrant', sessionStorage.getItem(CLIENT_ID_KEY), window.location.origin + sessionStorage.getItem(PATH_KEY));
+    return from(this.client.loginPKCEGrant(
+      sessionStorage.getItem(CLIENT_ID_KEY)!,
+      window.location.origin + sessionStorage.getItem(PATH_KEY),
+      { state: state }
+    )).pipe(
+      map(data => {
+        this.authData = data;
+        this._isAuthorized.set(true);
+        if (data.state) {
+          const actualState: State = JSON.parse(atob(data.state));
+          this.qParams = actualState.params;
+        }
+        return data;
+      }),
+      tap(() => {
+        setTimeout(() => {
+          const url = new URL(window.location.href);
+          url.searchParams.delete('code');
+          url.searchParams.delete('state');
+          window.history.replaceState({}, '', url.toString());
+        }, 1000)
+      })
+    );
   }
 
-  private initializeParams(qParams?: Params) {
-    if (!qParams) qParams = {};
-
-    if (qParams[CLIENT_ID_KEY]) this.clientId = qParams[CLIENT_ID_KEY];
+  private initializeParams(qParams: Params = {}, url?: string) {
+    sessionStorage.setItem(PATH_KEY, url ? "/" + url + "/" : "/");
+    if (qParams[CLIENT_ID_KEY]) sessionStorage.setItem(CLIENT_ID_KEY, qParams[CLIENT_ID_KEY]);
     if (qParams[LANG_KEY]) this.language = qParams[LANG_KEY];
     if (qParams[ENV_KEY]) this.environment = qParams[ENV_KEY];
   }
 
   private buildParams(): Params {
     const qParams: Params = {};
+    const clientId = sessionStorage.getItem(CLIENT_ID_KEY);
 
-    if (this.clientId) qParams[CLIENT_ID_KEY] = this.clientId;
+    if (clientId) qParams[CLIENT_ID_KEY] = clientId;
     if (this.language) qParams[LANG_KEY] = this.language;
     if (this.environment) qParams[ENV_KEY] = this.environment;
     return qParams;

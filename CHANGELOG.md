@@ -1,3 +1,6 @@
+[1.1.0]
+- Auth changed to PKCE
+- Dockerfile + nginx.conf added
 [1.0.0]
 - Problem with assignToMe button not enabling fixed
 [0.0.9]

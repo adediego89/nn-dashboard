@@ -4,4 +4,5 @@ import { HomeComponent } from './_components/home/home.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeComponent, canActivate: [canActivateGuard] },
+  { path: '**', pathMatch: 'full', component: HomeComponent, canActivate: [canActivateGuard] },
 ];
