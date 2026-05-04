@@ -1,0 +1,143 @@
+<p-table [value]="(queuesSvc.$queues | async)!"
+         dataKey="id"
+         [scrollable]="true"
+         scrollHeight="flex"
+         [filters]="filters()"
+         (onFilter)="onFilter($event)"
+         sortField="waiting"
+         [sortOrder]="sortOrder()"
+         (onSort)="onSort($event)"
+         [size]="'small'">
+
+  <ng-template #caption>
+    <div class="flex justify-content-between align-items-center">
+      <div></div>
+      <h4 class="m-0">{{'queues.title' | translate}}</h4>
+      <div>
+        <p-button text size="small" severity="secondary" [icon]="status() === PanelStatusEnum.COLLAPSED ? 'pi pi-lock' : 'pi pi-unlock'" (onClick)="toggleStatus.emit()"></p-button>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #header>
+    <tr>
+      <th id="expansion" style="width: 50px"></th>
+      <th id="name" pSortableColumn="name">
+        <div class="flex align-items-center justify-content-between">
+          <div class="flex align-items-center gap-2">
+            {{'queues.columns.name' | translate}}
+            <p-sortIcon field="name" />
+          </div>
+          <p-columnFilter field="name" display="menu" type="text"></p-columnFilter>
+        </div>
+      </th>
+      <th id="waiting" pSortableColumn="waiting">
+        <div class="flex align-items-center gap-2">
+          {{'queues.columns.waiting' | translate}}
+          <p-sortIcon field="waiting" />
+        </div>
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template #body let-queue let-expanded="expanded">
+    <tr style="line-height: 2.1rem">
+      <td>
+        <p-button type="button"
+                  [pRowToggler]="queue"
+                  severity="secondary"
+                  [text]="true"
+                  [size]="'small'"
+                  [icon]="expanded && queue.interactions.length > 0 ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                  [disabled]="queue.interactions.length === 0"/>
+      </td>
+      <td class="queue">
+        <span class="text">{{ queue.name }}</span></td>
+      <td>
+        <div class="flex justify-content-center">
+          <span>{{ queue.waiting }}</span>
+          @if (queue.longest) {
+            <span class="ml-2">({{queue.longest | customTime:(clockSvc.now$ | async)}})</span>
+          }
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template #expandedrow let-queue>
+    @if (queue.interactions.length > 0) {
+    <tr>
+      <td colspan="3" class="extendedCell">
+
+          <p-table [value]="queue.interactions" dataKey="id" [size]="'small'">
+            <ng-template #header>
+              <tr>
+                <th id="mediaType" class="smallCell" pSortableColumn="mediaType">
+                  <div class="flex items-center gap-2">
+                    {{'interactions.type' | translate}}
+                    <p-sortIcon field="mediaType" />
+                  </div>
+                </th>
+                <th id="direction" class="smallCell" pSortableColumn="direction">
+                  <div class="flex items-center gap-2">
+                    {{'interactions.direction' | translate}}
+                    <p-sortIcon field="direction" />
+                  </div>
+                </th>
+                <th id="activityDate" class="smallCell" pSortableColumn="activityDate">
+                  <div class="flex items-center gap-2">
+                    {{'interactions.timeInQueue' | translate}}
+                    <p-sortIcon field="activityDate" />
+                  </div>
+                </th>
+                <th id="ani">{{'interactions.ani' | translate}}</th>
+                <th id="dnis">{{'interactions.dnis' | translate}}</th>
+                <th id="actions" class="actionCell"></th>
+              </tr>
+            </ng-template>
+            <ng-template #body let-interaction>
+              <tr>
+                <td>
+                  <span class="material-symbols-outlined">
+                    @switch (interaction.mediaType) {
+                      @case ('voice') { call }
+                      @case ('email') { mail }
+                      @case ('chat') { chat }
+                      @case ('callback') { phone_callback }
+                    }
+                  </span>
+                </td>
+                <td>
+                  <span class="material-symbols-outlined" [class.inbound]="interaction.direction === 'inbound'">outbound</span>
+                </td>
+                <td>{{ interaction.activityDate | customTime:(clockSvc.now$ | async) }}</td>
+                <td>{{ interaction.ani | phoneFormat }}</td>
+                <td>{{ interaction.dnis | phoneFormat }}</td>
+
+                <td>
+                  @if (hasPermission(interaction.mediaType)) {
+                    <p-button size="small"
+                              severity="primary"
+                              text
+                              icon="pi pi-directions-alt"
+                              [pTooltip]="'interactions.assignToMe' | translate"
+                              [disabled]="!isOnQueue()"
+                              (onClick)="assignToMe(interaction)">
+                    </p-button>
+                  }
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template #emptymessage>
+              <tr>
+                <td colspan="6">{{'interactions.notFoundQueue' | translate}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+
+      </td>
+    </tr>
+    }
+  </ng-template>
+
+</p-table>

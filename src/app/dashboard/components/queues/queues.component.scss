@@ -1,0 +1,11 @@
+.queue {
+  overflow: hidden;
+  white-space: nowrap;
+
+  .text {
+    text-overflow: ellipsis;
+  }
+
+}
+
+

@@ -2,7 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 import { provideTranslateService } from "@ngx-translate/core";
 import { providePrimeNG } from 'primeng/config';
-import { MyPreset } from '../myPreset';
+import { AddInTheme } from '../add-in-theme';
 
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
@@ -19,7 +19,7 @@ export const appConfig: ApplicationConfig = {
     }),
     providePrimeNG({
       theme: {
-        preset: MyPreset
+        preset: AddInTheme
       }
     })
   ]

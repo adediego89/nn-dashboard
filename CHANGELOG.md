@@ -1,3 +1,6 @@
+[latest]
+- Project renaming & re-structuration
+- Add email-widget add-in to the project
 [1.1.0]
 - Auth changed to PKCE
 - Dockerfile + nginx.conf added
