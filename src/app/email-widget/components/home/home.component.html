@@ -1,0 +1,14 @@
+@if(conversationResource.isLoading() || messageResource.isLoading()){
+  loading
+} @else if (conversationResource.hasValue() && messageResource.hasValue()) {
+  @let conversation = conversationResource.value();
+  @let message = messageResource.value();
+
+
+  <div class="p-3">
+    <app-email-widget-form></app-email-widget-form>
+  </div>
+
+} @else {
+  problem
+}

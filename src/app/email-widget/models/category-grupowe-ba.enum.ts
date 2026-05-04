@@ -1,0 +1,16 @@
+export enum CategoryGrupoweBaEnum {
+  CAT1 = 'Alior - ponowny wydruk dokumentów',
+  CAT2 = 'Alior - rezygnacja',
+  CAT3 = 'Alior - wyjaśnienie zamknięcia polisy',
+  CAT4 = 'Alior - zmiany na polisie',
+  CAT5 = 'Bank Śląski - ponowny wydruk dokumentów',
+  CAT6 = 'Bank Śląski - rezygnacja',
+  CAT7 = 'Bank Śląski - wyjaśnienie zamknięcia polisy',
+  CAT8 = 'Bank Śląski - zmiany na polisie',
+  CAT9 = 'Pocztowy - zmiany na polisie',
+  CAT10 = 'RAIFFEISEN - indywidualna kontynuacja',
+  CAT11 = 'RAIFFEISEN - ponowny wydruk dokumentów',
+  CAT12 = 'RAIFFEISEN - rezygnacja',
+  CAT13 = 'RAIFFEISEN - wyjaśnienie zamknięcia polisy',
+  CAT14 = 'RAIFFEISEN - Zmiany na polisie',
+}

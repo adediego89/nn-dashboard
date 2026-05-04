@@ -1,0 +1,33 @@
+@let data = model();
+<p-card>
+  <form #cForm="ngForm">
+
+    <div class="field">
+      <label for="type">{{ 'emailWidget.type' | translate }}</label>
+      <p-select [options]="typeOpts" [(ngModel)]="data.type" class="w-full" id="type" name="type" (onChange)="onTypeChange($event.value)" required />
+    </div>
+
+    <div class="field">
+      <label for="category">{{ 'emailWidget.category' | translate }}</label>
+      <p-select [options]="categoryOpts" [(ngModel)]="data.category" class="w-full" id="category" name="category" required />
+    </div>
+
+    <div class="field">
+      <label for="system">{{ 'emailWidget.system' | translate }}</label>
+      <p-select [options]="systemOpts" [(ngModel)]="data.system" class="w-full" id="system" name="system" />
+    </div>
+
+    <div class="field">
+      <label for="initiator">{{ 'emailWidget.initiator' | translate }}</label>
+      <p-select [options]="initiatorOpts" [(ngModel)]="data.initiator" class="w-full" id="initiator" name="initiator" required />
+    </div>
+
+  </form>
+
+  <div class="flex justify-content-center w-full">
+    <p-button [label]="'emailWidget.buttonLabel' | translate" [disabled]="!cForm.valid"></p-button>
+  </div>
+
+
+</p-card>
+

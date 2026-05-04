@@ -38,5 +38,13 @@ export class ConversationsApiService {
       id: userId
     }));
   }
-  
+
+  getConversationById(conversationId: string) {
+    return this.apiInstance.getConversationsEmail(conversationId);
+  }
+
+  getEmailMessage(conversationId: string, messageId: string) {
+    return this.apiInstance.getConversationsEmailMessage(conversationId, messageId);
+  }
+
 }

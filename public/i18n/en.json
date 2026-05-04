@@ -40,5 +40,12 @@
   },
   "shared": {
     "queue": "Queue"
+  },
+  "emailWidget": {
+    "type": "Type",
+    "category": "Category",
+    "system": "System",
+    "initiator": "Initiator",
+    "buttonLabel": "Send"
   }
 }

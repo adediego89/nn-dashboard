@@ -40,5 +40,12 @@
   },
   "shared": {
     "queue": "Kolejka"
+  },
+  "emailWidget": {
+    "type": "Typ",
+    "category": "Temat",
+    "system": "Typ kontraktu",
+    "initiator": "Inicjator",
+    "buttonLabel": "Wysyłać"
   }
 }

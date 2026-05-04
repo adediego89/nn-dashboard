@@ -1,0 +1,18 @@
+export enum SystemEnum {
+  LIFE400 = 'LIFE400',
+  OFE = 'OFE',
+  TFI = 'TFI',
+  OUTBOX = 'Outbox/IK/FlatLion',
+  TIA_LIFE = 'TIA Life',
+  TIA_NON_LIFE = 'TIA Non-Life',
+  CLAS_LIFE = 'CLAS Life',
+  CLAS_NON_LIFE = 'CLAS Non-Life',
+  SOUG = 'SOUG',
+  GMD_EBAS = 'GMD/EBAS',
+  PROSPECT = 'Prospect',
+  DFE = 'DFE',
+  PPK = 'PPK',
+  OLAS = 'OLAS',
+  OLAS_LITWA = 'OLAS Litwa',
+  OLAS_LOTWA = 'OLAS Łotwa',
+}
