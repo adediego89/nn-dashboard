@@ -1,9 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
-import {ApiClient, AuthData, Models} from 'purecloud-platform-client-v2';
+import { ApiClient, AuthData, Models } from 'purecloud-platform-client-v2';
 import { CLIENT_ID_KEY, ENV_KEY, LANG_KEY, PATH_KEY } from '../_models';
-import {Params} from '@angular/router';
+import { Params } from '@angular/router';
 import { BehaviorSubject, from, mergeMap, Observable, tap } from 'rxjs';
-import {map} from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { UsersApiService } from './api/users-api.service';
 import { PresenceApiService } from './api/presence-api.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -35,7 +35,6 @@ export class AuthService {
   private readonly translate = inject(TranslateService);
 
   login(qParams?: Params, url?: string) {
-    console.log('login', url);
     this.initializeParams(qParams, url);
 
     this.client.setPersistSettings(true, 'agent-status-widget');
@@ -63,7 +62,6 @@ export class AuthService {
   }
 
   private loginPKCEGrant(state: string): Observable<AuthData> {
-    console.log('loginPKCEGrant', sessionStorage.getItem(CLIENT_ID_KEY), window.location.origin + sessionStorage.getItem(PATH_KEY));
     return from(this.client.loginPKCEGrant(
       sessionStorage.getItem(CLIENT_ID_KEY)!,
       window.location.origin + sessionStorage.getItem(PATH_KEY),

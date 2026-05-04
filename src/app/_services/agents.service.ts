@@ -72,11 +72,9 @@ export class AgentsService {
           switch (type) {
             case 'presence': found.presence = event.eventBody; break;
             case 'routingStatus': found.routingStatus = event.eventBody.routingStatus; break;
-            case 'conversationsummary': found.summary = event.eventBody; console.log('SummaryUpdate', found.summary); break;
+            case 'conversationsummary': found.summary = event.eventBody; break;
             case 'calls':
-              console.log('calls message received', foundIntIndex, userPart);
               if (foundIntIndex === -1 && userPart && !userPart.endTime) {
-                console.log('calls add');
                 found.interactions.push({
                   id: event.eventBody.id,
                   channel: 'voice',
@@ -86,7 +84,6 @@ export class AgentsService {
                   participantId: userPart.id
                 });
               } else if (foundIntIndex > -1 && userPart?.endTime) {
-                console.log('calls remove');
                 found.interactions.splice(foundIntIndex, 1);
               }
               break;

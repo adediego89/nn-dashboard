@@ -57,7 +57,6 @@ export class QueuesService {
             this.setMetricsToQueue(found, metrics);
           }
         } else if (event.topicName.startsWith('v2.analytics.conversations.activity.queue')) {
-          // console.log(event.eventBody);
           const queueId = topicSplit[5];
           const found = queues.find(e => e.id === queueId);
           if (found) {
@@ -71,7 +70,6 @@ export class QueuesService {
 
     this.clockSvc.now$.subscribe(now => {
       if (!this.subExpiration || this.subExpiration > now + 5000) return;
-      console.log('ResetQueueConversationActivitySubscriptions');
       this.subExpiration = undefined;
       const queueIds = this.$queues.getValue().map(queueStatus => queueStatus.id);
       this.initializeConversationMonitoring(queueIds);
@@ -122,7 +120,7 @@ export class QueuesService {
   }
 
   assignInteraction(conversationId: string) {
-    this.conversationsApiSvc.assignConversation(conversationId, this.usersApiSvc.me?.id!).subscribe(res => console.log(res));
+    this.conversationsApiSvc.assignConversation(conversationId, this.usersApiSvc.me?.id!).subscribe()
   }
 
   isOnQueue(): boolean {

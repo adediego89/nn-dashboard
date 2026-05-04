@@ -45,7 +45,6 @@ export class NotificationApiService {
         switchMap(() => this.create(this.channel?.connectUri!)),
         map(messageEvent => JSON.parse(messageEvent.data)))
       .subscribe(data => {
-        console.log(`[NotificationApi][Message]`, data);
         this.$messages.next(data);
       });
   }
