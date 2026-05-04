@@ -11,7 +11,7 @@ RUN npm run build
 # Serve with nginx
 FROM nginx:alpine
 
-COPY --from=build /app/dist/nn-dashboard /usr/share/nginx/html
+COPY --from=build /app/dist/nn-gc-addins /usr/share/nginx/html
 
 # Custom nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
