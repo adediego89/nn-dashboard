@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ConversationsApi } from 'purecloud-platform-client-v2';
 import { from } from 'rxjs';
+import { ConversationsApi, Models } from 'purecloud-platform-client-v2';
 
 @Injectable({providedIn: 'root'})
 export class ConversationsApiService {
@@ -45,6 +45,10 @@ export class ConversationsApiService {
 
   getEmailMessage(conversationId: string, messageId: string) {
     return this.apiInstance.getConversationsEmailMessage(conversationId, messageId);
+  }
+
+  postMessage(conversationId: string, body: Models.EmailMessage) {
+    return from(this.apiInstance.postConversationsEmailMessages(conversationId, body))
   }
 
 }

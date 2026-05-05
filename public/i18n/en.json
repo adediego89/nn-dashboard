@@ -42,6 +42,8 @@
     "queue": "Queue"
   },
   "emailWidget": {
+    "onlyInbound": "Only available for inbound email interactions",
+    "conversationNotFound": "Interaction data could not be loaded",
     "type": "Type",
     "category": "Category",
     "system": "System",

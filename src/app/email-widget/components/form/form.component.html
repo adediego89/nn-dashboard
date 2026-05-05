@@ -1,5 +1,5 @@
 @let data = model();
-<p-card>
+
   <form #cForm="ngForm">
 
     <div class="field">
@@ -25,9 +25,8 @@
   </form>
 
   <div class="flex justify-content-center w-full">
-    <p-button [label]="'emailWidget.buttonLabel' | translate" [disabled]="!cForm.valid"></p-button>
+    <p-button [label]="'emailWidget.buttonLabel' | translate" [disabled]="!cForm.valid" (onClick)="execute()"></p-button>
   </div>
 
 
-</p-card>
 

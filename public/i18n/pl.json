@@ -42,6 +42,8 @@
     "queue": "Kolejka"
   },
   "emailWidget": {
+    "onlyInbound": "Dostępne tylko w przypadku interakcji z pocztą przychodzącą",
+    "conversationNotFound": "Nie udało się załadować danych interakcji",
     "type": "Typ",
     "category": "Temat",
     "system": "Typ kontraktu",
