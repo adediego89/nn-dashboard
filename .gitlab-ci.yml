@@ -1,0 +1,66 @@
+
+
+stages:
+  - install
+  - dockerize
+  - update_helm
+
+install_build:
+  image: node:20.16.0-alpine3.20
+  script:
+    - npm install
+    - npm i -g angular-build-info
+    - npm run build
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - dist/configuration-exporter-gui/
+  cache:
+    paths:
+      - angular/node_modules/
+      - angular/.npm
+    policy: pull
+ 
+dockerize:
+  variables:
+    DOCKER_DRIVER: overlay2
+    IMAGE_NAME: $CI_HARBOR_REGISTRY/nn-gc/$CI_PROJECT_NAME
+    IMAGE_TAG: $CI_COMMIT_SHORT_SHA.$CI_PIPELINE_ID
+  before_script:
+    - mkdir -p /etc/docker
+    # Ensure the Docker config directory exists
+    - mkdir -p /root/.docker
+    # Decode the base64 encoded config.json and place it in the expected Docker config directory
+    - echo $DOCKER_CONFIG_JSON_HARBOR | base64 -d > /root/.docker/config.json
+  image: docker:27.1.1-whirlyca
+  script:
+    - |
+      echo "Building Docker image for branch $BRANCH_NAME..."
+
+      docker build -f docker/Dockerfile -t $IMAGE_NAME:$IMAGE_TAG .
+      docker push $IMAGE_NAME:$IMAGE_TAG
+
+update_helm:
+  image: alpine:3.20
+  tags:
+    - wia
+  variables:
+    TAG: $CI_COMMIT_SHORT_SHA.$CI_PIPELINE_ID
+  script:
+    - if [ -f version.txt ]; then RELEASE_VERSION=$(cat version.txt); fi
+    - if [[ $CI_COMMIT_REF_NAME =~ ^release ]]; then TAG=$RELEASE_VERSION; fi
+    - apk add --no-cache git
+    - git remote set-url origin "https://$REPO_TOKEN_NAME_HELM:$REPO_ACCESS_TOKEN_HELM@https://gitlab.whirly.aws/nationale-nederlanden/nn-gc-addins-helm-charts.git/"
+    - git config --global user.email "whirly.mail@whirly.pl"
+    - git config --global user.name "jenkins"
+    - git config --global http.sslVerify false
+    - git fetch
+    - BRANCH="master"
+    - git switch $BRANCH
+    #- git pull
+    - git reset --hard origin/$BRANCH
+    - 'sed -i "s/tag: \"[^\"]*\"/tag: \"$TAG\"/" $CI_PROJECT_NAME/values.yaml'
+    - git add $CI_PROJECT_NAME/values.yaml
+    - git commit -m "Update image tag to $TAG"
+    - git push -o ci.skip origin $BRANCH
+
