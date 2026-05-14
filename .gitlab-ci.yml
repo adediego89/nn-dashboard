@@ -28,6 +28,8 @@ dockerize:
     DOCKER_DRIVER: overlay2
     IMAGE_NAME: $CI_HARBOR_REGISTRY/nn-gc/$CI_PROJECT_NAME
     IMAGE_TAG: $CI_COMMIT_SHORT_SHA.$CI_PIPELINE_ID
+  before_script:
+    - echo "$HARBOR_PASSWORD" | docker login -u "$HARBOR_USERNAME" --password-stdin $CI_HARBOR_REGISTRY
   image: docker:27.1.1-whirlyca
   script:
     - |
