@@ -28,12 +28,6 @@ dockerize:
     DOCKER_DRIVER: overlay2
     IMAGE_NAME: $CI_HARBOR_REGISTRY/nn-gc/$CI_PROJECT_NAME
     IMAGE_TAG: $CI_COMMIT_SHORT_SHA.$CI_PIPELINE_ID
-  before_script:
-    - mkdir -p /etc/docker
-    # Ensure the Docker config directory exists
-    - mkdir -p /root/.docker
-    # Decode the base64 encoded config.json and place it in the expected Docker config directory
-    - echo $DOCKER_CONFIG_JSON_HARBOR | base64 -d > /root/.docker/config.json
   image: docker:27.1.1-whirlyca
   script:
     - |
