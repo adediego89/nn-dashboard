@@ -5,6 +5,10 @@ stages:
   - dockerize
   - update_helm
 
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+
 install_build:
   stage: install
   image: node:20.19.0-alpine3.20
