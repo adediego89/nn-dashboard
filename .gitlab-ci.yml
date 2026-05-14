@@ -15,7 +15,7 @@ install_build:
   artifacts:
     expire_in: 1 day
     paths:
-      - dist/configuration-exporter-gui/
+      - dist/nn-gc-addins/
   cache:
     paths:
       - angular/node_modules/
