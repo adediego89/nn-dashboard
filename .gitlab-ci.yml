@@ -7,7 +7,7 @@ stages:
 
 install_build:
   stage: install
-  image: node:20.16.0-alpine3.20
+  image: node:20.19.0-alpine3.20
   script:
     - npm install
     - npm i -g angular-build-info
