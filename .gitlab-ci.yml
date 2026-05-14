@@ -53,7 +53,7 @@ update_helm:
     - if [ -f version.txt ]; then RELEASE_VERSION=$(cat version.txt); fi
     - if [[ $CI_COMMIT_REF_NAME =~ ^release ]]; then TAG=$RELEASE_VERSION; fi
     - apk add --no-cache git
-    - git remote set-url origin "https://$REPO_TOKEN_NAME_HELM:$REPO_ACCESS_TOKEN_HELM@https://gitlab.whirly.aws/nationale-nederlanden/nn-gc-addins-helm-charts.git/"
+    - git remote set-url origin "https://$REPO_TOKEN_NAME_HELM:$REPO_ACCESS_TOKEN_HELM@gitlab.whirly.aws/nationale-nederlanden/nn-gc-addins-helm-charts.git/"
     - git config --global user.email "whirly.mail@whirly.pl"
     - git config --global user.name "jenkins"
     - git config --global http.sslVerify false
