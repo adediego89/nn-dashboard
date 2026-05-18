@@ -9,9 +9,12 @@ export class CreateCaseRequest {
   category?: string;
   initiator?: string;
   type?: string;
+  description?: string;
   emailId?: string;
   emailAddress?: string;
   emailDirectoryId?: string;
+  agreementType?: string = 'POLICY';
+  agreementNumber?: string;
 
   constructor(cId: string, pId: string) {
     this.requestId = uuidv4();

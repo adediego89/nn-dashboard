@@ -48,6 +48,9 @@
     "category": "Temat",
     "system": "Typ kontraktu",
     "initiator": "Inicjator",
+    "description": "Opis taska",
+    "agreementType": "Typ umowy",
+    "agreementNumber": "Numer umowy",
     "buttonLabel": "Wysyłać"
   }
 }

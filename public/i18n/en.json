@@ -48,6 +48,9 @@
     "category": "Category",
     "system": "System",
     "initiator": "Initiator",
+    "description": "Task description",
+    "agreementType": "Contract/Policy type",
+    "agreementNumber": "Contract/Policy number",
     "buttonLabel": "Send"
   }
 }

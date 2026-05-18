@@ -22,6 +22,27 @@
       <p-select [options]="initiatorOpts" [(ngModel)]="data.initiator" class="w-full" id="initiator" name="initiator" required />
     </div>
 
+    <div class="field">
+      <label for="description">{{ 'emailWidget.description' | translate }}</label>
+      <textarea pTextarea
+                [(ngModel)]="data.description"
+                class="w-full"
+                id="description"
+                name="description"
+                required>
+      </textarea>
+    </div>
+
+    <div class="field">
+      <label for="agreementNumber">{{ 'emailWidget.agreementNumber' | translate }}</label>
+      <input pInputText
+             [(ngModel)]="data.agreementNumber"
+             class="w-full"
+             id="agreementNumber"
+             name="agreementNumber"
+             [required]="data.agreementType !== undefined" />
+    </div>
+
   </form>
 
   <div class="flex justify-content-center w-full">
