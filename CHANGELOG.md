@@ -1,4 +1,4 @@
-[latest]
+[1.2.0]
 - Project renaming & re-structuration
 - Add email-widget add-in to the project
 
