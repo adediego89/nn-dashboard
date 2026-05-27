@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "nn-gc-addins": {
+    "nn-dashboard": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -26,7 +26,7 @@
                 "externals": "prepend"
               }
             },
-            "outputPath": "dist/nn-gc-addins",
+            "outputPath": "dist/nn-dashboard",
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
@@ -73,10 +73,10 @@
           "builder": "@angular-builders/custom-webpack:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "nn-gc-addins:build:production"
+              "buildTarget": "nn-dashboard:build:production"
             },
             "development": {
-              "buildTarget": "nn-gc-addins:build:development"
+              "buildTarget": "nn-dashboard:build:development"
             }
           },
           "defaultConfiguration": "development"

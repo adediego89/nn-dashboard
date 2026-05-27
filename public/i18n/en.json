@@ -40,17 +40,5 @@
   },
   "shared": {
     "queue": "Queue"
-  },
-  "emailWidget": {
-    "onlyInbound": "Only available for inbound email interactions",
-    "conversationNotFound": "Interaction data could not be loaded",
-    "type": "Type",
-    "category": "Category",
-    "system": "System",
-    "initiator": "Initiator",
-    "description": "Task description",
-    "agreementType": "Contract/Policy type",
-    "agreementNumber": "Contract/Policy number",
-    "buttonLabel": "Send"
   }
 }

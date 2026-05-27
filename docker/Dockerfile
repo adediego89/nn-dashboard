@@ -1,6 +1,6 @@
 FROM harbor.k8s.lab.whirly.pl/base/nginx-unprivileged:1.30-alpine
 
-COPY dist/nn-gc-addins /usr/share/nginx/html
+COPY dist/nn-dashboard /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80

@@ -6,10 +6,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { ApiClient, AuthData, Models } from 'purecloud-platform-client-v2';
 import {
   CLIENT_ID_KEY,
-  CONVERSATION_KEY,
-  EMAIL_API_ADDRESS,
-  EMAIL_DATATABLE_ID,
-  EMAIL_FORWARDING_ADDRESS,
   ENV_KEY,
   LANG_KEY,
   PATH_KEY
@@ -96,10 +92,6 @@ export class AuthService {
   private initializeParams(qParams: Params = {}, url?: string) {
     sessionStorage.setItem(PATH_KEY, url ? "/" + url + "/" : "/");
     if (qParams[CLIENT_ID_KEY]) sessionStorage.setItem(CLIENT_ID_KEY, qParams[CLIENT_ID_KEY]);
-    if (qParams[CONVERSATION_KEY]) sessionStorage.setItem(CONVERSATION_KEY, qParams[CONVERSATION_KEY]);
-    if (qParams[EMAIL_FORWARDING_ADDRESS]) sessionStorage.setItem(EMAIL_FORWARDING_ADDRESS, qParams[EMAIL_FORWARDING_ADDRESS]);
-    if (qParams[EMAIL_API_ADDRESS]) sessionStorage.setItem(EMAIL_API_ADDRESS, qParams[EMAIL_API_ADDRESS]);
-    if (qParams[EMAIL_DATATABLE_ID]) sessionStorage.setItem(EMAIL_DATATABLE_ID, qParams[EMAIL_DATATABLE_ID]);
     if (qParams[LANG_KEY]) this.language = qParams[LANG_KEY];
     if (qParams[ENV_KEY]) this.environment = qParams[ENV_KEY];
   }
@@ -107,16 +99,8 @@ export class AuthService {
   private buildParams(): Params {
     const qParams: Params = {};
     const clientId = sessionStorage.getItem(CLIENT_ID_KEY);
-    const conversationId = sessionStorage.getItem(CONVERSATION_KEY);
-    const emailAddress = sessionStorage.getItem(EMAIL_FORWARDING_ADDRESS);
-    const apiHostAddress = sessionStorage.getItem(EMAIL_API_ADDRESS);
-    const emailDatatableId = sessionStorage.getItem(EMAIL_DATATABLE_ID);
 
     if (clientId) qParams[CLIENT_ID_KEY] = clientId;
-    if (conversationId) qParams[CONVERSATION_KEY] = conversationId;
-    if (emailAddress) qParams[EMAIL_FORWARDING_ADDRESS] = emailAddress;
-    if (apiHostAddress) qParams[EMAIL_API_ADDRESS] = apiHostAddress;
-    if (emailDatatableId) qParams[EMAIL_DATATABLE_ID] = emailDatatableId;
     if (this.language) qParams[LANG_KEY] = this.language;
     if (this.environment) qParams[ENV_KEY] = this.environment;
     return qParams;

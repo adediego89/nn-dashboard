@@ -1,5 +1,4 @@
 export * from './conversations-api.service';
-export * from './architect-api.service';
 export * from './groups-api.service';
 export * from './notification-api.service';
 export * from './presence-api.service';
