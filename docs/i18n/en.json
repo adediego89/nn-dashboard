@@ -1,0 +1,44 @@
+{
+  "agents": {
+    "title": "Agents",
+    "columns": {
+      "name": "Name",
+      "presence": "Presence",
+      "presenceTime": "Time (Presence)",
+      "routing": "Routing",
+      "routingTime": "Time (Routing)",
+      "summary": "Interactions Summary",
+      "groups": "Groups"
+    },
+    "routingStatus": {
+      "OFF_QUEUE": "Off queue",
+      "IN_QUEUE": "On queue",
+      "INTERACTING": "Interacting",
+      "IDLE": "Idle",
+      "NOT_RESPONDING": "Not responding",
+      "COMMUNICATING": "Communicating"
+    }
+  },
+  "queues": {
+    "title": "Queues",
+    "columns": {
+      "name": "Name",
+      "waiting": "Waiting"
+    }
+  },
+  "interactions": {
+    "type": "Channel",
+    "direction": "Direction",
+    "duration": "Duration",
+    "timeInQueue": "Time",
+    "monitor": "Monitor",
+    "assignToMe": "Assign to me",
+    "ani": "ANI",
+    "dnis": "DNIS",
+    "notFound": "No interactions found",
+    "notFoundQueue": "No Waiting interactions in this queue"
+  },
+  "shared": {
+    "queue": "Queue"
+  }
+}
