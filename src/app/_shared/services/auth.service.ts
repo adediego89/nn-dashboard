@@ -90,6 +90,7 @@ export class AuthService {
   }
 
   private initializeParams(qParams: Params = {}, url?: string) {
+    console.log('InitParams', qParams, url);
     sessionStorage.setItem(PATH_KEY, url ? "/" + url + "/" : "/");
     if (qParams[CLIENT_ID_KEY]) sessionStorage.setItem(CLIENT_ID_KEY, qParams[CLIENT_ID_KEY]);
     if (qParams[LANG_KEY]) this.language = qParams[LANG_KEY];
